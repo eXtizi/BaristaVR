@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XR Continuum — Barista Calibration Trainer — Viva guide</title>
+<style>
+  :root {
+    --ink: #1c1612;
+    --muted: #5c5148;
+    --paper: #f6f1e8;
+    --card: #fffdf8;
+    --line: #e2d8cb;
+    --coffee: #6f3b24;
+    --brass: #8a6232;
+    --good: #1f6b45;
+    --warn: #8a3d12;
+    --chip: #efe6d8;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font: 17px/1.55 Georgia, "Iowan Old Style", Palatino, serif;
+    color: var(--ink);
+    background: var(--paper);
+  }
+  header.top {
+    background: #221c18;
+    color: #f6f1e8;
+    padding: 2.4rem 1.4rem 1.6rem;
+  }
+  header.top h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 0.4rem; font-weight: 600; }
+  header.top p { margin: 0.2rem 0; color: #d9cfc3; max-width: 46rem; }
+  header.top .kicker { letter-spacing: 0.14em; text-transform: uppercase; font: 0.72rem/1.4 system-ui, sans-serif; color: #c4a574; }
+  nav {
+    position: sticky; top: 0; z-index: 5;
+    background: #2c241e;
+    display: flex; gap: 0.4rem; flex-wrap: wrap;
+    padding: 0.55rem 1rem;
+    font: 0.78rem/1.3 system-ui, sans-serif;
+  }
+  nav a { color: #f3eadf; text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 999px; }
+  nav a:hover { background: #4a3b30; }
+  main { max-width: 60rem; margin: 0 auto; padding: 1.6rem 1.2rem 4rem; }
+  figure { margin: 1rem 0 1.5rem; }
+  figcaption { font: 0.82rem/1.4 system-ui, sans-serif; color: var(--muted); margin-top: 0.4rem; }
+  svg.diagram { display: block; }
+  h2 { font-size: 1.55rem; margin: 2.4rem 0 0.6rem; line-height: 1.2; }
+  h3 { font-size: 1.15rem; margin: 1.4rem 0 0.4rem; }
+  p { margin: 0.55rem 0; }
+  a { color: var(--coffee); }
+  .card, .q, .issue, .part {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 0.9rem 1rem;
+    margin: 0.7rem 0;
+  }
+  .grid { display: grid; gap: 0.7rem; }
+  @media (min-width: 720px) {
+    .grid.two { grid-template-columns: 1fr 1fr; }
+    .grid.three { grid-template-columns: 1fr 1fr 1fr; }
+  }
+  .layman { border-left: 4px solid var(--good); }
+  .jargon { border-left: 4px solid var(--brass); }
+  .warn { border-left: 4px solid var(--warn); }
+  .label {
+    font: 0.68rem/1 system-ui, sans-serif;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 0.3rem;
+  }
+  code, .mono { font: 0.86em/1.45 ui-monospace, Consolas, monospace; }
+  code { background: var(--chip); padding: 0.05em 0.3em; border-radius: 4px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; margin: 0.6rem 0 1rem; }
+  th, td { text-align: left; vertical-align: top; padding: 0.45rem 0.5rem; border-bottom: 1px solid var(--line); }
+  th { font: 0.75rem/1.3 system-ui, sans-serif; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+  ol.flow { list-style: none; padding: 0; margin: 0.6rem 0; }
+  ol.flow li {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 0.55rem 0.75rem 0.55rem 2.4rem;
+    margin: 0.35rem 0;
+    position: relative;
+  }
+  ol.flow li::before {
+    content: counter(step);
+    counter-increment: step;
+    position: absolute; left: 0.6rem; top: 0.55rem;
+    width: 1.4rem; height: 1.4rem; border-radius: 50%;
+    background: var(--coffee); color: white;
+    font: 0.75rem/1.4rem system-ui, sans-serif; text-align: center;
+  }
+  ol.flow { counter-reset: step; }
+  .formula {
+    background: #221c18; color: #f6f1e8;
+    border-radius: 12px; padding: 1rem 1.1rem; overflow-x: auto;
+    font: 0.95rem/1.5 ui-monospace, Consolas, monospace;
+  }
+  .say {
+    background: #f3eadf;
+    border-radius: 10px;
+    padding: 0.7rem 0.9rem;
+    margin: 0.4rem 0;
+  }
+  .say strong { font-family: system-ui, sans-serif; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--coffee); }
+  footer { color: var(--muted); font-size: 0.85rem; margin-top: 2rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0.4rem 0; }
+  .chips span { background: var(--chip); border-radius: 999px; padding: 0.2rem 0.6rem; font: 0.8rem/1.4 system-ui, sans-serif; }
+  svg.diagram { width: 100%; height: auto; background: var(--card); border: 1px solid var(--line); border-radius: 12px; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="kicker">INTE 42312 · Group XR Continuum · study page, not a slide deck</div>
+  <h1>Barista Calibration Trainer</h1>
+  <p>One seated café. One order: a double-shot flat white. The trainee’s hands set the grind, the dose, the tamp and the milk temperature. A small formula turns that technique into a sour, bitter, balanced or channeled shot.</p>
+  <p>Open this file in any browser. Fill in member names before the viva. Speak from the live build, not from an older note that disagrees with it.</p>
+</header>
+<nav>
+  <a href="#diagrams">Diagrams</a>
+  <a href="#intent">What sir wants</a>
+  <a href="#stack">Stack</a>
+  <a href="#apart">Taken apart</a>
+  <a href="#together">Put together</a>
+  <a href="#model">The formula</a>
+  <a href="#tech">Mechanics</a>
+  <a href="#code">Code map</a>
+  <a href="#issues">What went wrong</a>
+  <a href="#why">Why we chose this</a>
+  <a href="#viva">Questions he may ask</a>
+  <a href="#ai">AI, said honestly</a>
+  <a href="#demo">Demo</a>
+  <a href="#limits">Say this first</a>
+</nav>
+<main>
+
+<section id="diagrams">
+  <h2>Diagrams</h2>
+  <p>These are the pictures for the slides. They describe the build you have now, including the short slide along the counter and physics-based grabbing.</p>
+
+  <h3>1. One shift, with the decisions</h3>
+  <figure>
+    <svg class="diagram" viewBox="0 0 920 640" role="img" aria-label="Flowchart of one coffee shift">
+      <rect width="920" height="640" fill="#fffdf8"/>
+      <defs>
+        <marker id="a1" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#6f3b24"/></marker>
+      </defs>
+      <g font-family="system-ui,sans-serif" font-size="13" fill="#1c1612" text-anchor="middle">
+        <rect x="370" y="16" width="180" height="36" rx="18" fill="#6f3b24"/>
+        <text x="460" y="39" fill="#fff">Sit down. Read welcome</text>
+        <line x1="460" y1="52" x2="460" y2="72" stroke="#6f3b24" stroke-width="1.5" marker-end="url(#a1)"/>
+
+        <rect x="370" y="74" width="180" height="36" rx="8" fill="#efe6d8" stroke="#e2d8cb"/>
+        <text x="460" y="96">Press START. Board hides</text>
+        <line x1="460" y1="110" x2="460" y2="130" stroke="#6f3b24" stroke-width="1.5" marker-end="url(#a1)"/>
+
+        <polygon points="460,132 560,162 460,192 360,162" fill="#fff" stroke="#8a6232" stroke-width="1.5"/>
+        <text x="460" y="158" font-size="12">Handle swung left?</text>
+        <text x="460" y="174" font-size="11" fill="#5c5148">Unlock portafilter</text>
+        <line x1="560" y1="162" x2="640" y2="162" stroke="#6f3b24" stroke-width="1.5"/>
+        <line x1="640" y1="162" x2="640" y2="132" stroke="#6f3b24" stroke-width="1.5"/>
+        <line x1="640" y1="132" x2="560" y2="132" stroke="#6f3b24" stroke-width="1.5" marker-end="url(#a1)"/>
+        <text x="600" y="124" font-size="11" fill="#8a3d12">no, try again</text>
+        <line x1="460" y1="192" x2="460" y2="212" stroke="#6f3b24" stroke-width="1.5" marker-end="url(#a1)"/>
+        <text x="478" y="208" font-size="11" fill="#1f6b45">yes</text>
+
+        <rect x="350" y="214" width="220" height="40" rx="8" fill="#efe6d8" stroke="#e2d8cb"/>
+        <text x="460" y="232">Seat in grinder fork</text>
+        <text x="460" y="246" font-size="11" fill="#5c5148">Hold GRIND until about 18 g</text>
+        <line x1="460" y1="254" x2="460" y2="274" stroke="#6f3b24" stroke-width="1.5" marker-end="url(#a1)"/>
+
+        <rect x="350" y="276" width="220" height="40" rx="8" fill="#efe6d8" stroke="#e2d8cb"/>
+        <text x="460" y="294">Tamp on the black mat</text>
+        <text x="460" y="308" font-size="11" fill="#5c5148">About 15 kg, keep it level</text>
+        <line x1="460" y1="316" x2="460" y2="336" stroke="#6f3b24" stroke-width="1.5" marker-end="url(#a1)"/>
+
+        <polygon points="460,338 575,372 460,406 345,372" fill="#fff" stroke="#8a6232" stroke-width="1.5"/>
+        <text x="460" y="368" font-size="12">Locked in the group head?</text>
+        <text x="460" y="384" font-size="11" fill="#5c5148">Swing handle right</text>
+        <line x1="575" y1="372" x2="680" y2="372" stroke="#6f3b24" stroke-width="1.5"/>
+        <line x1="680" y1="372" x2="680" y2="338" stroke="#6f3b24" stroke-width="1.5"/>
+        <line x1="680" y1="338" x2="575" y2="338" stroke="#6f3b24" stroke-width="1.5" marker-end="url(#a1)"/>
+        <text x="640" y="330" font-size="11" fill="#8a3d12">no, brew is refused</text>
+        <line x1="460" y1="406" x2="460" y2="426" stroke="#6f3b24" stroke-width="1.5" marker-end="url(#a1)"/>
+        <text x="478" y="422" font-size="11" fill="#1f6b45">yes</text>
+
+        <rect x="300" y="428" width="140" height="44" rx="8" fill="#efe6d8" stroke="#e2d8cb"/>
+        <text x="370" y="448">Brew</text>
+        <text x="370" y="462" font-size="11" fill="#5c5148">Gauge + formula</text>
+        <rect x="480" y="428" width="140" height="44" rx="8" fill="#efe6d8" stroke="#e2d8cb"/>
+        <text x="550" y="448">Steam to 65°C</text>
+        <text x="550" y="462" font-size="11" fill="#5c5148">Chime, then close</text>
+        <line x1="440" y1="450" x2="478" y2="450" stroke="#6f3b24" stroke-width="1.5" marker-end="url(#a1)"/>
+        <line x1="620" y1="450" x2="660" y2="450" stroke="#6f3b24" stroke-width="1.5" marker-end="url(#a1)"/>
+        <rect x="662" y="428" width="120" height="44" rx="8" fill="#efe6d8" stroke="#e2d8cb"/>
+        <text x="722" y="448">Pour</text>
+        <text x="722" y="462" font-size="11" fill="#5c5148">Fill the cup</text>
+
+        <line x1="722" y1="472" x2="722" y2="500" stroke="#6f3b24" stroke-width="1.5"/>
+        <line x1="722" y1="500" x2="460" y2="500" stroke="#6f3b24" stroke-width="1.5"/>
+        <line x1="460" y1="500" x2="460" y2="518" stroke="#6f3b24" stroke-width="1.5" marker-end="url(#a1)"/>
+
+        <rect x="330" y="520" width="260" height="36" rx="8" fill="#1f6b45"/>
+        <text x="460" y="542" fill="#fff">Verdict: Sour, Bitter, Balanced, Channeled</text>
+        <line x1="330" y1="538" x2="150" y2="538" stroke="#6f3b24" stroke-width="1.5"/>
+        <line x1="150" y1="538" x2="150" y2="234" stroke="#6f3b24" stroke-width="1.5"/>
+        <line x1="150" y1="234" x2="348" y2="234" stroke="#6f3b24" stroke-width="1.5" marker-end="url(#a1)"/>
+        <text x="150" y="390" font-size="12" fill="#6f3b24" transform="rotate(-90 150 390)">Pull another shot. Grind stays.</text>
+      </g>
+    </svg>
+    <figcaption>Figure 1. The shift. Diamonds are gates: brew does nothing until the portafilter is locked. The loop back keeps the grind setting so the trainee can dial in.</figcaption>
+  </figure>
+
+  <h3>2. How the pieces connect</h3>
+  <figure>
+    <svg class="diagram" viewBox="0 0 920 420" role="img" aria-label="Architecture diagram">
+      <rect width="920" height="420" fill="#fffdf8"/>
+      <defs>
+        <marker id="a2" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#6f3b24"/></marker>
+      </defs>
+      <g font-family="system-ui,sans-serif" font-size="13" text-anchor="middle" fill="#1c1612">
+        <rect x="30" y="24" width="180" height="52" rx="8" fill="#221c18"/>
+        <text x="120" y="46" fill="#f6f1e8">Headset</text>
+        <text x="120" y="64" fill="#c4a574" font-size="11">OpenXR + XRI hands</text>
+        <rect x="30" y="96" width="180" height="52" rx="8" fill="#221c18"/>
+        <text x="120" y="118" fill="#f6f1e8">Mouse and keys</text>
+        <text x="120" y="136" fill="#c4a574" font-size="11">DesktopRigDriver</text>
+
+        <line x1="210" y1="50" x2="280" y2="110" stroke="#6f3b24" stroke-width="1.5" marker-end="url(#a2)"/>
+        <line x1="210" y1="122" x2="280" y2="130" stroke="#6f3b24" stroke-width="1.5" marker-end="url(#a2)"/>
+
+        <rect x="282" y="96" width="200" height="64" rx="8" fill="#efe6d8" stroke="#e2d8cb"/>
+        <text x="382" y="122">Same input actions</text>
+        <text x="382" y="142" font-size="11" fill="#5c5148">Select, snap turn</text>
+
+        <line x1="482" y1="128" x2="540" y2="128" stroke="#6f3b24" stroke-width="1.5" marker-end="url(#a2)"/>
+        <rect x="542" y="70" width="160" height="44" rx="8" fill="#fff" stroke="#8a6232"/>
+        <text x="622" y="96">Grab tools</text>
+        <rect x="542" y="126" width="160" height="44" rx="8" fill="#fff" stroke="#8a6232"/>
+        <text x="622" y="152">Press and drag</text>
+
+        <line x1="702" y1="92" x2="760" y2="70" stroke="#6f3b24" stroke-width="1.5" marker-end="url(#a2)"/>
+        <line x1="702" y1="148" x2="760" y2="168" stroke="#6f3b24" stroke-width="1.5" marker-end="url(#a2)"/>
+
+        <rect x="762" y="36" width="140" height="120" rx="8" fill="#efe6d8" stroke="#e2d8cb"/>
+        <text x="832" y="64">Stations</text>
+        <text x="832" y="86" font-size="11" fill="#5c5148">Grind · Tamp</text>
+        <text x="832" y="104" font-size="11" fill="#5c5148">Lock · Steam</text>
+        <text x="832" y="122" font-size="11" fill="#5c5148">Pour</text>
+
+        <line x1="832" y1="156" x2="832" y2="190" stroke="#6f3b24" stroke-width="1.5" marker-end="url(#a2)"/>
+        <rect x="742" y="192" width="160" height="48" rx="8" fill="#6f3b24"/>
+        <text x="822" y="214" fill="#fff">ShiftFlow</text>
+        <text x="822" y="230" fill="#f0d7c4" font-size="11">ticket + yellow marker</text>
+
+        <rect x="282" y="250" width="200" height="70" rx="8" fill="#1f6b45"/>
+        <text x="382" y="278" fill="#fff">ExtractionModel</text>
+        <text x="382" y="298" fill="#d7efe2" font-size="11">grind, dose, tamp, tilt</text>
+        <line x1="742" y1="216" x2="484" y2="270" stroke="#6f3b24" stroke-width="1.5" marker-end="url(#a2)"/>
+
+        <rect x="30" y="250" width="200" height="70" rx="8" fill="#efe6d8" stroke="#e2d8cb"/>
+        <text x="130" y="278">Gauge and result dial</text>
+        <text x="130" y="298" font-size="11" fill="#5c5148">what the trainee sees</text>
+        <line x1="282" y1="285" x2="232" y2="285" stroke="#6f3b24" stroke-width="1.5" marker-end="url(#a2)"/>
+
+        <rect x="520" y="280" width="200" height="56" rx="8" fill="#efe6d8" stroke="#e2d8cb"/>
+        <text x="620" y="304">AudioKit</text>
+        <text x="620" y="322" font-size="11" fill="#5c5148">sound at the object</text>
+        <line x1="622" y1="156" x2="622" y2="278" stroke="#6f3b24" stroke-width="1.5" marker-end="url(#a2)"/>
+
+        <rect x="30" y="350" width="860" height="48" rx="8" fill="#221c18"/>
+        <text x="460" y="378" fill="#f6f1e8">CafeSceneBuilder writes the scene. Build Windows Player saves that scene, then makes the exe.</text>
+      </g>
+    </svg>
+    <figcaption>Figure 2. Headset and mouse share one set of actions. Stations report into ShiftFlow. The formula reads technique and drives the gauge. Sound is separate and positional.</figcaption>
+  </figure>
+
+  <h3>3. What happens when you grab and let go</h3>
+  <figure>
+    <svg class="diagram" viewBox="0 0 920 460" role="img" aria-label="Grab and collision flowchart">
+      <rect width="920" height="460" fill="#fffdf8"/>
+      <defs>
+        <marker id="a3" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#6f3b24"/></marker>
+      </defs>
+      <g font-family="system-ui,sans-serif" font-size="13" text-anchor="middle" fill="#1c1612">
+        <rect x="360" y="16" width="200" height="34" rx="17" fill="#6f3b24"/>
+        <text x="460" y="38" fill="#fff">Hand grabs a tool</text>
+        <line x1="460" y1="50" x2="460" y2="70" stroke="#6f3b24" marker-end="url(#a3)"/>
+        <rect x="300" y="72" width="320" height="40" rx="8" fill="#efe6d8" stroke="#e2d8cb"/>
+        <text x="460" y="96">Physics pushes it toward the hand</text>
+        <line x1="460" y1="112" x2="460" y2="136" stroke="#6f3b24" marker-end="url(#a3)"/>
+
+        <polygon points="460,138 590,178 460,218 330,178" fill="#fff" stroke="#8a6232"/>
+        <text x="460" y="174">Hits something solid?</text>
+        <text x="460" y="190" font-size="11" fill="#5c5148">counter, machine, other tool</text>
+
+        <line x1="590" y1="178" x2="700" y2="178" stroke="#6f3b24" marker-end="url(#a3)"/>
+        <rect x="702" y="150" width="190" height="56" rx="8" fill="#fff" stroke="#1f6b45"/>
+        <text x="797" y="172">Blocked</text>
+        <text x="797" y="190" font-size="11" fill="#5c5148">shove apart capped</text>
+        <text x="797" y="204" font-size="11" fill="#5c5148">at 0.25 m/s</text>
+
+        <line x1="330" y1="178" x2="200" y2="178" stroke="#6f3b24" marker-end="url(#a3)"/>
+        <rect x="20" y="154" width="178" height="48" rx="8" fill="#fff" stroke="#e2d8cb"/>
+        <text x="109" y="182">Follows the hand</text>
+
+        <line x1="460" y1="218" x2="460" y2="246" stroke="#6f3b24" marker-end="url(#a3)"/>
+        <rect x="330" y="248" width="260" height="34" rx="17" fill="#221c18"/>
+        <text x="460" y="270" fill="#fff">Let go</text>
+        <line x1="460" y1="282" x2="460" y2="304" stroke="#6f3b24" marker-end="url(#a3)"/>
+
+        <polygon points="460,306 600,346 460,386 320,346" fill="#fff" stroke="#8a6232"/>
+        <text x="460" y="342">Socket or group head</text>
+        <text x="460" y="358" font-size="11" fill="#5c5148">takes it?</text>
+        <line x1="600" y1="346" x2="700" y2="346" stroke="#6f3b24" marker-end="url(#a3)"/>
+        <rect x="702" y="322" width="190" height="48" rx="8" fill="#efe6d8" stroke="#e2d8cb"/>
+        <text x="797" y="350">They hold it</text>
+        <line x1="460" y1="386" x2="460" y2="408" stroke="#6f3b24" marker-end="url(#a3)"/>
+        <text x="500" y="404" font-size="11" fill="#1f6b45">no</text>
+        <rect x="300" y="410" width="320" height="36" rx="8" fill="#1f6b45"/>
+        <text x="460" y="432" fill="#fff">Stand upright, or return to its spot</text>
+      </g>
+    </svg>
+    <figcaption>Figure 3. Collisions work because physics moves the tool. The tamper is the exception on the basket and the tamp mat only: those two are ignored so it can press into the coffee. Its “push back” is the drawn mesh, not a collision force.</figcaption>
+  </figure>
+
+  <h3>4. Where things sit, seen from above</h3>
+  <figure>
+    <svg class="diagram" viewBox="0 0 920 460" role="img" aria-label="Top-down layout of the cafe counter">
+      <rect width="920" height="460" fill="#f6f1e8"/>
+      <g font-family="system-ui,sans-serif" font-size="13" fill="#1c1612">
+        <rect x="40" y="24" width="840" height="70" fill="#d9cfc3"/>
+        <text x="460" y="64" text-anchor="middle">Back wall. Boards hang flat on it, above the cups.</text>
+        <rect x="60" y="110" width="150" height="54" rx="6" fill="#221c18"/>
+        <text x="135" y="142" text-anchor="middle" fill="#f6f1e8">Station</text>
+        <rect x="230" y="100" width="250" height="70" rx="6" fill="#6f3b24"/>
+        <text x="355" y="132" text-anchor="middle" fill="#fff">Welcome / credits</text>
+        <text x="355" y="150" text-anchor="middle" fill="#f0d7c4" font-size="11">hides after START</text>
+        <rect x="500" y="110" width="140" height="54" rx="6" fill="#3a332c"/>
+        <text x="570" y="142" text-anchor="middle" fill="#f6f1e8">Menu</text>
+        <rect x="660" y="110" width="190" height="54" rx="6" fill="#3a332c"/>
+        <text x="755" y="142" text-anchor="middle" fill="#f6f1e8">Desktop help</text>
+
+        <rect x="80" y="200" width="760" height="16" fill="#8a6232"/>
+        <text x="460" y="232" text-anchor="middle" fill="#5c5148" font-size="12">Cup shelf. Boards start above this line so text is not cut off.</text>
+
+        <rect x="300" y="260" width="220" height="80" rx="6" fill="#c5c6c8" stroke="#1c1612"/>
+        <text x="410" y="296" text-anchor="middle">Espresso machine</text>
+        <text x="410" y="316" text-anchor="middle" font-size="11" fill="#5c5148">group head, brew, steam</text>
+
+        <rect x="80" y="280" width="160" height="90" rx="6" fill="#fffdf8" stroke="#e2d8cb"/>
+        <text x="160" y="322" text-anchor="middle">Order ticket</text>
+        <text x="160" y="342" text-anchor="middle" font-size="11" fill="#5c5148">checklist above</text>
+        <text x="160" y="358" text-anchor="middle" font-size="11" fill="#5c5148">NOW below a rule</text>
+
+        <rect x="620" y="280" width="180" height="70" rx="6" fill="#fffdf8" stroke="#e2d8cb"/>
+        <text x="710" y="320" text-anchor="middle">Shot report</text>
+
+        <rect x="120" y="400" width="680" height="36" rx="6" fill="#6f3b24"/>
+        <text x="460" y="423" text-anchor="middle" fill="#fff">Counter, within reach: grinder, tamper, pitcher, cup. No session buttons here.</text>
+      </g>
+    </svg>
+    <figcaption>Figure 4. Top view, wall at the top, you at the bottom. Tools stay on the counter. Reading boards and the station buttons are on the wall, out of arm’s reach, so a grab cannot press them.</figcaption>
+  </figure>
+
+  <h3>5. How a shot becomes a verdict</h3>
+  <figure>
+    <svg class="diagram" viewBox="0 0 920 300" role="img" aria-label="Extraction verdict flowchart">
+      <rect width="920" height="300" fill="#fffdf8"/>
+      <defs>
+        <marker id="a5" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#6f3b24"/></marker>
+      </defs>
+      <g font-family="system-ui,sans-serif" font-size="13" text-anchor="middle" fill="#1c1612">
+        <rect x="300" y="16" width="320" height="40" rx="8" fill="#efe6d8" stroke="#e2d8cb"/>
+        <text x="460" y="41">Inputs: grind, dose, tamp kg, tilt</text>
+        <line x1="460" y1="56" x2="460" y2="78" stroke="#6f3b24" marker-end="url(#a5)"/>
+        <rect x="250" y="80" width="420" height="36" rx="8" fill="#221c18"/>
+        <text x="460" y="103" fill="#f6f1e8">Formula writes a time and a pressure</text>
+        <line x1="460" y1="116" x2="460" y2="140" stroke="#6f3b24" marker-end="url(#a5)"/>
+
+        <polygon points="160,142 250,176 160,210 70,176" fill="#fff" stroke="#8a6232"/>
+        <text x="160" y="180">Tilt &gt; 5°?</text>
+        <rect x="20" y="230" width="140" height="40" rx="8" fill="#8a3d12"/>
+        <text x="90" y="255" fill="#fff">Channeled</text>
+        <line x1="160" y1="210" x2="160" y2="228" stroke="#6f3b24" marker-end="url(#a5)"/>
+        <text x="176" y="224" font-size="11" fill="#8a3d12">yes</text>
+
+        <polygon points="460,142 560,176 460,210 360,176" fill="#fff" stroke="#8a6232"/>
+        <text x="460" y="174">Time &lt; 25 s?</text>
+        <text x="460" y="190" font-size="11" fill="#5c5148">and not tilted</text>
+        <rect x="390" y="230" width="140" height="40" rx="8" fill="#c4a574"/>
+        <text x="460" y="255">Sour</text>
+        <line x1="460" y1="210" x2="460" y2="228" stroke="#6f3b24" marker-end="url(#a5)"/>
+        <text x="476" y="224" font-size="11" fill="#8a6232">yes</text>
+
+        <polygon points="760,142 860,176 760,210 660,176" fill="#fff" stroke="#8a6232"/>
+        <text x="760" y="180">Time &gt; 30 s?</text>
+        <rect x="690" y="230" width="140" height="40" rx="8" fill="#6f3b24"/>
+        <text x="760" y="255" fill="#fff">Bitter</text>
+        <line x1="760" y1="210" x2="760" y2="228" stroke="#6f3b24" marker-end="url(#a5)"/>
+        <text x="776" y="224" font-size="11" fill="#8a3d12">yes</text>
+
+        <line x1="560" y1="176" x2="658" y2="176" stroke="#6f3b24" marker-end="url(#a5)"/>
+        <text x="600" y="168" font-size="11" fill="#1f6b45">no</text>
+        <line x1="250" y1="176" x2="358" y2="176" stroke="#6f3b24"/>
+        <text x="290" y="168" font-size="11" fill="#1f6b45">no</text>
+
+        <rect x="390" y="250" width="0" height="0"/>
+        <text x="460" y="292" font-size="12" fill="#1f6b45">Otherwise Balanced. Advice says what to change. Grind is kept on retry.</text>
+      </g>
+    </svg>
+    <figcaption>Figure 5. Tilt is checked first, so a hard but crooked tamp is Channeled, not Balanced. Sour means grind finer or dose closer to 18 g. Bitter means grind coarser.</figcaption>
+  </figure>
+
+  <h3>6. Why Play mode and the exe can disagree</h3>
+  <figure>
+    <svg class="diagram" viewBox="0 0 920 200" role="img" aria-label="Build pipeline">
+      <rect width="920" height="200" fill="#fffdf8"/>
+      <defs>
+        <marker id="a6" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#6f3b24"/></marker>
+      </defs>
+      <g font-family="system-ui,sans-serif" font-size="13" text-anchor="middle" fill="#1c1612">
+        <rect x="24" y="60" width="180" height="64" rx="8" fill="#efe6d8" stroke="#e2d8cb"/>
+        <text x="114" y="88">Edit the scripts</text>
+        <text x="114" y="106" font-size="11" fill="#5c5148">CafeSceneBuilder</text>
+        <line x1="204" y1="92" x2="250" y2="92" stroke="#6f3b24" marker-end="url(#a6)"/>
+        <rect x="252" y="60" width="200" height="64" rx="8" fill="#6f3b24"/>
+        <text x="352" y="86" fill="#fff">Build Cafe Scene</text>
+        <text x="352" y="104" fill="#f0d7c4" font-size="11">writes the scene file</text>
+        <line x1="452" y1="80" x2="510" y2="50" stroke="#6f3b24" marker-end="url(#a6)"/>
+        <line x1="452" y1="104" x2="510" y2="140" stroke="#6f3b24" marker-end="url(#a6)"/>
+        <rect x="512" y="20" width="180" height="52" rx="8" fill="#fff" stroke="#1f6b45"/>
+        <text x="602" y="50">Press Play</text>
+        <rect x="512" y="116" width="180" height="52" rx="8" fill="#fff" stroke="#8a6232"/>
+        <text x="602" y="146">Build Windows Player</text>
+        <line x1="692" y1="46" x2="740" y2="46" stroke="#6f3b24" marker-end="url(#a6)"/>
+        <line x1="692" y1="142" x2="740" y2="142" stroke="#6f3b24" marker-end="url(#a6)"/>
+        <rect x="742" y="20" width="154" height="52" rx="8" fill="#efe6d8" stroke="#e2d8cb"/>
+        <text x="819" y="50">Editor view</text>
+        <rect x="742" y="116" width="154" height="52" rx="8" fill="#221c18"/>
+        <text x="819" y="146" fill="#fff">BaristaVR.exe</text>
+      </g>
+    </svg>
+    <figcaption>Figure 6. Play shows whatever scene is open. The exe is built from the scene file on disk. Build Windows Player runs Build Cafe Scene first, so the two match. File → Build Settings does not.</figcaption>
+  </figure>
+</section>
+
+<section id="intent">
+  <h2>What the brief is actually asking</h2>
+  <div class="card layman">
+    <div class="label">In plain words</div>
+    <p>There is no written report. The presentation is the assessment. Sir is not trying to catch you for using AI. He is checking whether each person can stand next to the part they own, run it, and explain why it is built that way. A group that can only press Play will fail even if the café looks finished.</p>
+  </div>
+  <div class="card jargon">
+    <div class="label">How that shows up in the required talk</div>
+    <p>The brief’s presentation order (the notes in <code>Docs/Presentation-Notes.md</code> follow it) asks for: names and who owns what, a plan versus what actually happened, a real problem, a vision, objectives you can measure, theory (presence, cybersickness, vergence-accommodation conflict, D.I.C.E.), a design rationale, an architecture, one advanced feature you can derive on a whiteboard, a test table filled with your own results, limitations, and an honest AI disclosure.</p>
+  </div>
+  <div class="card warn">
+    <div class="label">Fill these in before you present</div>
+    <p>Member names. Who operates which station live. Planned days versus the days you actually used. The three objective numbers from your own walkthroughs (time to finish, attempts to reach Balanced, milk temperature). The AI tools each person used, and what they changed by hand afterwards.</p>
+  </div>
+</section>
+
+<section id="stack">
+  <h2>What it is built with</h2>
+  <div class="chips">
+    <span>Unity 6 · 6000.6.4f1</span>
+    <span>URP 17</span>
+    <span>OpenXR</span>
+    <span>XR Interaction Toolkit 3.6.1</span>
+    <span>Input System</span>
+    <span>C#</span>
+    <span>Windows 64-bit player</span>
+  </div>
+  <table>
+    <tr><th>Piece</th><th>Plain meaning</th><th>Why it is here</th></tr>
+    <tr><td>Unity</td><td>The program that runs the 3D café.</td><td>The module’s engine. One project, Editor and a Windows build.</td></tr>
+    <tr><td>URP</td><td>The renderer. It draws the lights, metals and text.</td><td>Unity 6’s normal 3D pipeline. Our text shader is written for it.</td></tr>
+    <tr><td>OpenXR</td><td>A common door for headsets, so we are not locked to one brand.</td><td>Only add the interaction profiles you actually test. An empty profile list is a viva trap if you claim a headset you never wore.</td></tr>
+    <tr><td>XRI 3</td><td>The VR hands: grab, press, sockets, snap turn.</td><td>Starter Assets rig plus the Device Simulator for Editor testing.</td></tr>
+    <tr><td>Input System</td><td>Named actions (Select, Snap Turn) instead of raw buttons.</td><td>The same actions serve a headset and the mouse. Desktop adds bindings; it does not invent a second control scheme.</td></tr>
+    <tr><td>C# scripts</td><td>The rules: dose, tamp, lock, brew, steam, pour.</td><td>No asset-store café pack. Geometry is Unity primitives. Sound is generated in code.</td></tr>
+  </table>
+  <p>The whole café is not saved by dragging objects around. <code>Assets/Editor/CafeSceneBuilder.cs</code> builds <code>Assets/Scenes/CafeCounter.unity</code> from code. Menu: <strong>Barista → Build Cafe Scene</strong>. The Windows player is <strong>Barista → Build Windows Player</strong>, which rebuilds that scene first and writes <code>Builds/Windows/BaristaVR.exe</code>.</p>
+</section>
+
+<section id="apart">
+  <h2>Taken apart</h2>
+  <p>Six pieces. Each one is useless alone. The viva “show me your file” question lands on one of these.</p>
+
+  <div class="part">
+    <h3>1. The body in the room</h3>
+    <p class="layman"><strong>Plain.</strong> You sit. Your eyes are about 1.2 m off the floor. The counter is 0.84 m. You do not walk through the café. You can snap-turn 45° and slide a short distance along the counter.</p>
+    <p class="jargon"><strong>Jargon.</strong> <code>XROrigin</code> in Device tracking mode, <code>CameraYOffset = 1.2</code>. Snap turn only. Continuous turn, teleport, climb and grab-move are off. A clamped slide (about ±1 m sideways) lives on the wall station, because a fixed seat could not comfortably reach both the ticket and the steam wand.</p>
+    <p>Files: <code>CafeSceneBuilder.BuildRig</code>, <code>SessionControls.cs</code>, <code>DesktopRigDriver.cs</code>.</p>
+  </div>
+  <div class="part">
+    <h3>2. The tools</h3>
+    <p class="layman"><strong>Plain.</strong> Portafilter, tamper, milk pitcher, cup. You grab them. They have weight in the sense that they trail your hand a little, and they stop when they hit the counter. When you let go they stand upright. They do not get knocked over by a neighbour.</p>
+    <p class="jargon"><strong>Jargon.</strong> <code>XRGrabInteractable</code> with <em>velocity tracking</em>: the hand sets a target, physics pushes the rigidbody toward it, so colliders block it. Depenetration is capped at 0.25 m/s and velocity changes per step are capped, which is what stopped tools flinging off the counter. <code>ToolSettle</code> makes a released tool kinematic and upright. The ray starts at the tool, so a cup let go under the group head cannot be parked on top of the machine. Within 9 cm of its mark it slides onto the drip-tray ring. Tool colliders use a near-frictionless physics material, so they slide off surfaces instead of dragging. The tamper adds <code>TamperGrabTransformer</code>. It always stays velocity-tracked, so the basket and its handle block it. Within 9 cm of the mat or basket its rotation freezes vertical and it is guided onto the basket axis. The tamp reading comes from how far the base has travelled into the open basket; the colliders themselves are never set to ignore the portafilter. <code>PitcherPourTransformer</code> activates only when the jug is tipped near the cup; it solves the body pose backwards from a guided spout position, placing the jug sideways to the camera's right so the cup and stream remain visible.</p>
+  </div>
+  <div class="part">
+    <h3>3. The stations</h3>
+    <p class="layman"><strong>Plain.</strong> Grinder (hold to dose), tamp mat (press down, read kilograms and tilt), group head (swing the handle to lock), steam wand (heat milk to 65°C), cup (pour until full).</p>
+    <p class="jargon"><strong>Jargon.</strong> <code>ToolSocket</code> is an <code>XRSocketInteractor</code> that only accepts a portafilter or a pitcher. Buttons are <code>PressButton</code> on <code>XRSimpleInteractable</code>. Dials and the lock are <code>DragControl</code>: they read hand <em>position</em> along one axis, not wrist rotation, so the simulator, a headset and a mouse all work.</p>
+  </div>
+  <div class="part">
+    <h3>4. The shift</h3>
+    <p class="layman"><strong>Plain.</strong> A paper ticket lists the order and what to do now. A yellow marker floats over the next thing. You cannot brew before you lock. Finishing a step unlocks the next. “Pull another shot” starts again but keeps your grind setting, which is the whole point of dialling in.</p>
+    <p class="jargon"><strong>Jargon.</strong> <code>ShiftFlow</code> is a step enum: Briefing, Detach, Dose, Tamp, Lock, Brew, Steam, Pour, Result. Stations call <code>Complete</code>. <code>OrderTicket</code> renders the checklist. <code>HintMarker</code> follows <code>stepTargets</code>.</p>
+  </div>
+  <div class="part">
+    <h3>5. The shot model</h3>
+    <p class="layman"><strong>Plain.</strong> Finer grind, heavier dose and a firmer tamp make the shot run longer and the pressure rise. A tilted tamp lets water sneak down one side, so the shot runs fast and tastes wrong even if the numbers looked fine. The dial then says Sour, Bitter, Balanced or Channeled, and what to change.</p>
+    <p class="jargon"><strong>Jargon.</strong> <code>ExtractionModel.Predict</code> is deterministic. Same inputs, same shot, every time. It is a teaching model with the right <em>direction</em>, not a fluid simulation. Say that before anyone asks.</p>
+  </div>
+  <div class="part">
+    <h3>6. Sound and words</h3>
+    <p class="layman"><strong>Plain.</strong> The grinder buzzes only while it is dosing. The pump hums during the shot. Steam hisses and drops in pitch as the milk heats, and a chime plays at 65°C. A quiet café murmur sits behind you. No downloaded audio files.</p>
+    <p class="jargon"><strong>Jargon.</strong> <code>AudioKit</code> writes PCM clips at runtime. Every source is 3D (<code>spatialBlend = 1</code>, logarithmic rolloff). Text is <code>TextMesh</code> with shader <code>Barista/WorldText</code> so letters depth-test and do not draw through the controllers.</p>
+  </div>
+</section>
+
+<section id="together">
+  <h2>Put back together: one flat white</h2>
+  <p>The flowchart is <a href="#diagrams">Figure 1</a>. The same path, as a list you can read while someone else drives:</p>
+  <ol class="flow">
+    <li>Read the welcome board, press START. The board hides. The ticket’s red line becomes “unlock the portafilter”.</li>
+    <li>Swing the group-head handle left. The portafilter leaves the machine and stays in the hand.</li>
+    <li>Seat it in the grinder fork and hold GRIND. Aim for 18 g. The grind dial starts at 6.5, deliberately a bit coarse, so the first shot is usually fast and sour.</li>
+    <li>Move it to the black mat. Hold the tamper upright and press. The card shows kilograms and tilt. About 15 kg, nearly level, is the house target.</li>
+    <li>Offer it back under the group head and swing the handle right until it locks. Brew does nothing until this happens.</li>
+    <li>Cup on the drip tray, press BREW. The needle climbs, time and yield count, espresso appears in the cup.</li>
+    <li>Pitcher on the steam rest, tip in the milk, STEAM open. Close it at the 65°C chime. Over 70°C is scalded.</li>
+    <li>Tilt the pitcher over the cup. When the cup is full the dial appears: verdict, numbers, and a sentence about what to change.</li>
+    <li>Pull another shot. Grind setting stays. Dose, tamp and milk start again. That second attempt is the calibration loop.</li>
+  </ol>
+</section>
+
+<section id="model">
+  <h2>The formula, slowly</h2>
+  <div class="formula">
+    time = 27.5 × e^(−0.22 × (grind − 5)) × (1 + 0.015 × (tamp − 15)) × (dose / 18)^1.6<br>
+    if tamp &lt; 5 kg, time × 0.8<br>
+    if tilt &gt; 5°, time × 0.75 &nbsp;&nbsp;(channeled)<br>
+    pressure = clamp( 9 × √(time / 27.5) , 2.5, 11 ) &nbsp;&nbsp;then × 0.8 if channeled<br>
+    under 25 s → Sour &nbsp;·&nbsp; over 30 s → Bitter &nbsp;·&nbsp; else Balanced &nbsp;·&nbsp; tilt wins and becomes Channeled
+  </div>
+  <div class="grid two">
+    <div class="card layman">
+      <div class="label">Say this</div>
+      <p>27.5 seconds is a normal double shot. Grind 5 is the reference. A higher grind number is coarser, the exponential gets smaller, the shot runs faster, pressure drops, and we call it sour. More coffee or a harder tamp slows it down. A tilted tamp shortens the shot even if you pressed hard, because water found an easy path.</p>
+    </div>
+    <div class="card jargon">
+      <div class="label">If he asks for a number</div>
+      <p>Grind 6.5, dose 18 g, tamp 15 kg, tilt 0: the exp term is e^(−0.22 × 1.5) ≈ 0.72, so time ≈ 27.5 × 0.72 ≈ 20 s. That is under 25 s, so the first shot is Sour. Grind 5 with the same dose and tamp is about 27.5 s, Balanced. You do not need the calculator if you can show the direction.</p>
+    </div>
+  </div>
+  <p>Live, the gauge does not jump to the final pressure. It rises over about 3 seconds, wobbles slightly, and the stream starts after a short preinfusion. Yield is scaled to 36 g by the end of the predicted time. The verdict uses the predicted time, not a stopwatch the user can cheat.</p>
+</section>
+
+<section id="tech">
+  <h2>Mechanics, at the level of the code</h2>
+  <p>The sections above are what you say out loud. This is the layer underneath, with the constants that are actually in the scripts. If he says the talk felt descriptive, open this and derive one block on the board.</p>
+
+  <h3>Step machine</h3>
+  <p><code>ShiftFlow</code> is a single enum, not a behaviour tree. A station may call <code>Complete(step)</code> only when <code>Current</code> equals that step, so brew cannot skip the lock and steam cannot start during the shot. Completing a step moves the yellow marker to the next transform in <code>stepTargets</code> and plays the chime. <code>Restart</code> reloads the scene. <code>Attempt</code> is static, so the ticket can show “shot 2”, and <code>GrindDial</code> keeps its setting in another static (<code>s_Saved</code>). Dose, tamp and milk are instance state, so they reset. That split is the calibration loop: the variable you are dialling in survives, the shot you just pulled does not.</p>
+  <table>
+    <tr><th>Step</th><th>Who is allowed to finish it</th><th>Gate inside that script</th></tr>
+    <tr><td>Briefing</td><td><code>OrderTicket</code> on START</td><td>Button is hidden after this step.</td></tr>
+    <tr><td>Detach</td><td><code>GroupHead</code></td><td>Lock lever dragged to ≤ 0.03 while seated and locked.</td></tr>
+    <tr><td>Dose</td><td><code>GrinderStation</code></td><td>Portafilter lifted out of the fork with enough grams. Under 8 g is refused.</td></tr>
+    <tr><td>Tamp</td><td><code>TamperPress</code></td><td>Released after a press of at least 5 kg, centred within 2.5 cm.</td></tr>
+    <tr><td>Lock</td><td><code>GroupHead</code></td><td>Seated, then lever ≥ 0.97. Brew also re-checks <code>IsLocked</code>.</td></tr>
+    <tr><td>Brew</td><td><code>ExtractionModel</code></td><td>Locked, cup under the group head, shot timer finished.</td></tr>
+    <tr><td>Steam</td><td><code>SteamWand</code></td><td>Valve closed and peak milk ≥ 55°C. Target chime is 65°C. Scald warning at 72°C.</td></tr>
+    <tr><td>Pour</td><td><code>MilkPour</code></td><td>Pitcher tilted over the cup until the fill fraction completes.</td></tr>
+  </table>
+
+  <h3>Live shot, not just the final number</h3>
+  <p><code>Predict</code> runs once, when BREW is accepted. The gauge does not display that pressure immediately. Each frame does this, with <em>T</em> and <em>P</em> the predicted time and pressure:</p>
+  <div class="formula">
+    preinfusion = min(4 s, 0.3 T)<br>
+    P(t) = P · clamp(t / 3 s, 0, 1) + 0.08 · sin(13 t)<br>
+    yield fraction = clamp( (t − preinfusion) / (T − preinfusion) , 0, 1 )<br>
+    mass in cup = yield fraction × 36 g<br>
+    stream and drip audio on only while yield fraction &gt; 0
+  </div>
+  <p>The sine term is display noise, about 0.08 bar, so the needle is not a dead line. The ramp over 3 seconds is the pump coming up to pressure. Liquid is withheld until preinfusion ends, which is why a fast shot still pauses before the stream. When <em>t</em> reaches <em>T</em> the pump stops, the gauge drops to zero, and <code>RecordShot</code> stores the <em>predicted</em> time. A trainee cannot stretch a sour shot into a balanced one by waiting. The verdict is a function of inputs, not of how long they held the button.</p>
+
+  <h3>Grind dial</h3>
+  <div class="formula">
+    setting = round(lerp(1, 10, drag) × 10) / 10<br>
+    knob yaw = −drag × 270°<br>
+    drag is hand travel along the grinder’s local X, over 0.15 m for the full range
+  </div>
+  <p><code>Apply</code> returns immediately if a shot is running, so the model cannot be edited mid-extraction. 1 is fine, 10 is coarse. The start value 6.5 is a static default, not a random roll.</p>
+
+  <h3>Tamp, as two different signals</h3>
+  <p>The collider of the tamper does not touch the basket or the mat (<code>Physics.IgnoreCollision</code>). Force is computed from the pivot, which is the centre of the base:</p>
+  <div class="formula">
+    depth = bedTop.y − tamper.y &nbsp;&nbsp;(metres the hand has gone below the puck)<br>
+    kg = min(depth × 1000, 35)<br>
+    visual offset = depth × (1 − 0.15) &nbsp;&nbsp;so the mesh sinks 15% and is drawn back 85%<br>
+    tilt = angle(tamper.up, portafilter.up)<br>
+    haptic amplitude = clamp(kg / 25, 0, 1) every 50 ms, controller only
+  </div>
+  <p>The hold pose is a grab transformer, which runs before physics and overwrites the target pose. It does not copy controller rotation. It keeps the yaw from the moment of the grab, then adds a fraction of how far the wrist has tilted since then:</p>
+  <div class="formula">
+    wrist = angle between world up and (handNow × inverse(handAtGrab) × up)<br>
+    guide = 1 when the base is inside 2 cm of the basket axis, 0 outside 5 cm, and only within 12 cm above the bed<br>
+    tilt allowed = min(wrist × 0.3, 12°) × (1 − 0.7 × guide)<br>
+    position = hand − rotation × (0, 0.085 m, 0) &nbsp;&nbsp;then x,z lerped toward the basket by guide
+  </div>
+  <p>0.085 m is the handle above the base, so the hand closes on the knob, not on the disk. The guide term is the basket wall: once you are over the coffee, most of the remaining tilt is removed and the shaft is pulled onto the axis. Outside that radius the tamper can still be held crooked, which is how a Channeled shot is produced on purpose.</p>
+
+  <h3>Grab, collision, and the 90 Hz step</h3>
+  <p>Held tools use XRI velocity tracking. The interactor writes a target pose. The rigidbody is not kinematic while held, so the solver can refuse the motion. Resting tools and a locked portafilter are kinematic, which is why a neighbour cannot knock them over and why the group head can parent the portafilter without a physics fight. On release, <code>ToolSettle</code> waits two frames (so a socket or the group head can claim it), raycasts down, and either stands the tool on a flat surface that is not another grabbable, or sends it home.</p>
+  <table>
+    <tr><th>Parameter</th><th>Value</th><th>What it stops</th></tr>
+    <tr><td><code>Time.fixedDeltaTime</code></td><td>1/90 s</td><td>A 50 Hz default step made held tools stutter against a 72–90 Hz headset.</td></tr>
+    <tr><td>Solver iterations</td><td>12 position, 4 velocity</td><td>Soft, spongy contacts at the default of 6 and 1.</td></tr>
+    <tr><td><code>maxDepenetrationVelocity</code></td><td>0.25 m/s</td><td>Unity’s default overlap separation, about 10 m/s, which flung tools off the counter.</td></tr>
+    <tr><td><code>maxLinearVelocityDelta</code></td><td>3 m/s per step</td><td>A fast hand teleporting the rigidbody through a contact.</td></tr>
+    <tr><td><code>maxAngularVelocityDelta</code></td><td>12 rad/s per step</td><td>The same, for spin.</td></tr>
+    <tr><td>Linear / angular damping</td><td>0.5 / 2</td><td>Residual velocity after a contact.</td></tr>
+    <tr><td>Collision detection</td><td>Continuous dynamic</td><td>Tunnelling when the hand moves faster than the collider thickness.</td></tr>
+    <tr><td>Velocity damping and scale</td><td>both 1</td><td>Full tracking, no extra float. Weight is the smoothing and the caps, not a fake mass slider.</td></tr>
+  </table>
+  <p>Mass is still set (portafilter 0.5 kg, tamper 0.45, pitcher 0.6, cup 0.3) because the solver uses it when two dynamic bodies meet. It is not what you feel as “weight in the hand”. Say that if he equates mass with presence.</p>
+
+  <h3>One input path</h3>
+  <p>Headset grip and mouse click are two bindings on one action, <code>XRI Right Interaction / Select</code>. <code>DesktopRigDriver</code> adds <code>&lt;Mouse&gt;/leftButton</code> to Select and Select Value, and Q and E as a 2D composite on Snap Turn, in the group <code>KeyboardMouse</code>. It does not run when <code>XRSettings.isDeviceActive</code> is true, and it does not run in the Editor if an <code>XRDeviceSimulator</code> is in the scene. So there are never two owners of the hand.</p>
+  <div class="formula">
+    ray = camera.ScreenPointToRay(mouse)<br>
+    hand = ray.GetPoint(reach) &nbsp;&nbsp;reach starts at 0.55 m, scroll changes it by 0.03, clamped to 0.2…1.1 m<br>
+    look: yaw and pitch from the right mouse, pitch clamped to ±70°<br>
+    pour: hand pitched toward 100° while Space is held, at 160°/s
+  </div>
+  <p>Dials do not read that wrist angle. <code>DragControl</code> projects hand translation onto one axis in a frame that does not rotate with the knob: <code>value += dot(hand − handAtGrab, axis) / metresForFullRange</code>. That is why the same dial works for a tracked controller, the simulator, and a mouse that only supplies a point.</p>
+
+  <h3>Sound, sample by sample</h3>
+  <p><code>AudioKit</code> fills a <code>float[]</code> at 44100 Hz, mono, once per clip, then caches it. No asset files. Each <code>AudioSource</code> is fully spatial (<code>spatialBlend = 1</code>), logarithmic rolloff, min distance 0.35 m, max 12 m, doppler off. The café bed is the same clip with min distance 1.5 m, spread 120°, volume 0.25, played from behind the seat.</p>
+  <table>
+    <tr><th>Clip</th><th>How the samples are made</th><th>When it plays</th></tr>
+    <tr><td>Grinder</td><td>Brown noise, plus sines at 95 Hz and 190 Hz, a slow 7 Hz amplitude wobble, rare spikes.</td><td>Loop, only while dosing into a seated portafilter.</td></tr>
+    <tr><td>Pump</td><td>50, 100 and 150 Hz, plus a little noise. One second, looped.</td><td>From BREW accepted until <em>t = T</em>.</td></tr>
+    <tr><td>Pour / drip</td><td>Leaky integrated noise, amplitude modulated around 5 Hz.</td><td>Drip during yield. Pour while the pitcher stream is over the cup.</td></tr>
+    <tr><td>Steam</td><td>Differenced white noise, a hiss. Pitch is separate from the clip.</td><td>Valve open. Pitch lerps 1.3 → 0.8 as milk goes 5 → 70°C. If the tip is in air, pitch is 1.5 and volume is higher.</td></tr>
+    <tr><td>Knock, click, chime</td><td>Exponentially decayed sines. Click ~1800 Hz. Chime 880 and 1320 Hz.</td><td>Tamp contact, lock, buttons. Chime at 65°C and on each completed step.</td></tr>
+  </table>
+
+  <h3>Text shader</h3>
+  <p>Unity’s font shader does not depth-test in URP, so ticket text drew over the controller. <code>Barista/WorldText</code> is an unlit transparent pass: <code>ZTest LEqual</code>, <code>ZWrite Off</code>, queue Transparent. Coverage is the font alpha, hardened with <code>smoothstep</code> around 0.5 using <code>fwidth</code> so the edge stays one pixel. It does not sample neighbouring texels. An earlier outline did, and because glyphs sit against each other in the atlas the outline picked up the next letter and bloomed under the pendant lights.</p>
+
+  <h3>What is deliberately not simulated</h3>
+  <table>
+    <tr><th>Real thing</th><th>Stand-in</th></tr>
+    <tr><td>Navier–Stokes in the puck</td><td>One exponential in grind, one power in dose, a linear tamp term, a tilt multiplier.</td></tr>
+    <tr><td>Puck spring and friction</td><td>Mesh offset and a kilogram number. No force applied back to the rigidbody.</td></tr>
+    <tr><td>Milk proteins and stretch</td><td>Temperature integrates at 4.5°C/s while the tip is under the surface. Pour is a fill fraction from pitcher tilt and aim.</td></tr>
+    <tr><td>HRTF / recorded room</td><td>Unity’s built-in logarithmic panner on synthetic clips.</td></tr>
+    <tr><td>Presence score</td><td>Not measured. The design arguments are in the theory section. Do not report a number you did not collect.</td></tr>
+  </table>
+</section>
+
+<section id="code">
+  <h2>Where the code lives</h2>
+  <table>
+    <tr><th>Concern</th><th>File</th></tr>
+    <tr><td>Scene, rig, lighting, layout</td><td><code>Assets/Editor/CafeSceneBuilder.cs</code></td></tr>
+    <tr><td>Steps, ticket text, restart</td><td><code>Assets/Scripts/Flow/ShiftFlow.cs</code>, <code>OrderTicket.cs</code></td></tr>
+    <tr><td>Slide, turn, reset, credits, exit</td><td><code>Assets/Scripts/Flow/SessionControls.cs</code></td></tr>
+    <tr><td>Mouse and keyboard</td><td><code>Assets/Scripts/Input/DesktopRigDriver.cs</code></td></tr>
+    <tr><td>Grinder and dial</td><td><code>GrinderStation.cs</code>, <code>GrindDial.cs</code></td></tr>
+    <tr><td>Tamper hold and tamp force</td><td><code>TamperGrabTransformer.cs</code>, <code>TamperPress.cs</code></td></tr>
+    <tr><td>Lock</td><td><code>GroupHead.cs</code></td></tr>
+    <tr><td>Shot</td><td><code>ExtractionModel.cs</code>, <code>MachineGauge.cs</code></td></tr>
+    <tr><td>Milk</td><td><code>SteamWand.cs</code>, <code>MilkPitcher.cs</code>, <code>MilkPour.cs</code></td></tr>
+    <tr><td>Put-down behaviour</td><td><code>Interaction/ToolSettle.cs</code></td></tr>
+    <tr><td>Sound</td><td><code>Audio/AudioKit.cs</code>, <code>AmbientCafe.cs</code></td></tr>
+    <tr><td>Text shader</td><td><code>Assets/Shaders/WorldText.shader</code></td></tr>
+  </table>
+  <p>Suggested ownership if you have four people: rig and desktop; dose and tamp; lock and extraction; steam, pour, ticket, audio. With three, merge dose/tamp with lock/extraction. Each person must be able to open their file and point at the method while the demo runs.</p>
+</section>
+
+<section id="issues">
+  <h2>What actually broke, and the fix</h2>
+  <p>These are the problems from this build, not a generic “challenges” slide. If he asks “what did you change after the first test”, start here.</p>
+  <table>
+    <tr><th>What you saw</th><th>Cause</th><th>Fix</th></tr>
+    <tr><td>Ticket text drew on top of the controller.</td><td>Default text did not depth-test.</td><td>URP shader <code>Barista/WorldText</code> with <code>ZTest LEqual</code>.</td></tr>
+    <tr><td>Titles looked smeared and gold.</td><td>An outline sampled neighbouring letters in the font atlas, then the pendant lights bloomed them.</td><td>Outline removed. Boards are matte and out of the lamp cones. Lights turned down.</td></tr>
+    <tr><td>Welcome board covered the machine, and the menu stuck out behind it.</td><td>The board was too close, and <code>Facing()</code> angled wall boards so one edge entered the wall.</td><td>Boards hang flat on the back wall, above the cup shelf. Welcome hides after START.</td></tr>
+    <tr><td>Order ticket lines crossed. Desktop help was unreadable.</td><td>Checklist and the NOW line shared one vertical band. Help was 1.7 cm type behind the cups.</td><td>Taller ticket, a rule between the two texts. Help is a larger two-column board to the right of the menu.</td></tr>
+    <tr><td>Counter buttons fired while you were making coffee.</td><td>They sat in the same reach as the tools.</td><td>Station panel on the back wall, pointer only. Reset and Exit need a second press.</td></tr>
+    <tr><td>Play mode looked new. The .exe looked old.</td><td>Play uses the open scene. The player builds the file on disk. That file was from an earlier Build Cafe Scene.</td><td>Build Windows Player regenerates and saves the scene, then packages it.</td></tr>
+    <tr><td>Tamper wiggled and lay sideways.</td><td>It copied full controller rotation and was velocity-lagged.</td><td><code>TamperGrabTransformer</code>: upright grip, limited wrist tilt, basket guide.</td></tr>
+    <tr><td>Tamper passed through the portafilter handle.</td><td>Tamp code ignored every collision between them, and a kinematic grip does not hit a seated basket.</td><td>Those ignores are gone. The tamper stays dynamic. Round colliders match the discs, and rotation freezes upright over the mat so a contact cannot tip it.</td></tr>
+    <tr><td>Cup jumped onto the machine when set on the tray.</td><td>The settle ray started 30 cm above the cup and hit the group head.</td><td>The ray starts at the cup. Close to the ring, it slides onto the mark.</td></tr>
+    <tr><td>A tap counted as a tamp, and the shot had no goal.</td><td>Any contact over 5 kg completed the step. The dial showed live numbers only.</td><td>The press must be held for a second. The dial shows a 9 bar target and a 25–30 s goal while the shot runs.</td></tr>
+    <tr><td>Cup and pitcher felt weightless, then jumped sideways.</td><td>Velocity tracking plus Unity’s default overlap push (up to about 10 m/s).</td><td>Still velocity tracking, so collisions work, but depenetration capped at 0.25 m/s, velocity steps capped, physics at 90 Hz.</td></tr>
+    <tr><td>After a “make it stable” pass, tools ghosted through the counter.</td><td>Kinematic grabbing teleports the object and skips contacts.</td><td>Reverted to velocity tracking. Kinematic is only for tools that are resting or locked in the group head.</td></tr>
+    <tr><td>Editor would not enter Play.</td><td><code>SessionControls.cs</code> was missing a closing brace.</td><td>File rewritten. Play mode refuses to start while any script fails to compile.</td></tr>
+  </table>
+</section>
+
+<section id="why">
+  <h2>Decisions he will ask you to defend</h2>
+  <div class="q">
+    <h3>Why VR, not a phone AR overlay on the real machine?</h3>
+    <p>D.I.C.E. says use immersive tech when the real task is dangerous, impossible, counterproductive or expensive. Practising on the live group head during service is counterproductive (customers wait) and expensive (about 18 g of coffee and a jug of milk per shot). AR would still need the real machine, the real beans and the real floor. Replacing the café removes all of that, and lets us show pressure and time that a real machine hides.</p>
+  </div>
+  <div class="q">
+    <h3>Why seated, device origin, snap turn?</h3>
+    <p>The task is a reach in front of a seated person, not a tour of a building. Device origin places the counter relative to the headset at start, with eyes at 1.2 m, so a desk simulator and a seated headset match. Snap turn is instantaneous, so it does not create vection (the feeling that you are moving when you are not), which is the usual route to cybersickness. We later added a slow, clamped slide because a frozen seat could not reach the ticket and the wand. We did not add smooth turn, teleport or flying.</p>
+  </div>
+  <div class="q">
+    <h3>Why is the tamper a full pass-through on the basket, with no physics push back?</h3>
+    <div class="say"><strong>Say this exactly. Do not upgrade it.</strong> The basket and the tamp mat ignore collision with the tamper. There is no spring force on the rigidbody. Resistance is visual: the mesh only follows 15% of the hand’s downward travel (<code>compliance = 0.15</code>). Force on the card is <code>depth × 1000 kg/m</code>, capped at 35 kg. A headset vibrates with that force. A mouse does not. We did it this way because a real physics spring fought velocity tracking and flung the tamper. The number is what the extraction model reads, not the physics engine.</div>
+  </div>
+  <div class="q">
+    <h3>Why do other tools collide, then?</h3>
+    <p>Because passing through the counter felt broken, and kinematic grabs cannot both follow the hand and stop on contact. Velocity tracking lets the solver block the cup on the counter. The fling was a separate bug: when two colliders overlapped, the solver separated them too fast. Capping that speed fixed the jump without giving up collisions.</p>
+  </div>
+  <div class="q">
+    <h3>Why generate the scene in an Editor script?</h3>
+    <p>The layout changed many times (text size, board positions, collision). Rebuilding from code means the Windows player and the Editor cannot drift apart, as long as you use our build menu. Hand-editing the scene and then building would ship the old café. That happened once.</p>
+  </div>
+  <div class="q">
+    <h3>Why no downloaded models or café audio?</h3>
+    <p>Licensing and credits. Primitives and synthesised clips are ours to explain. The credits board names the Unity packages under the Companion License, the built-in font, and that AI use is disclosed in the presentation. If you used anything else, add it before the demo.</p>
+  </div>
+</section>
+
+<section id="viva">
+  <h2>Questions, with the answer in one breath</h2>
+  <div class="q"><h3>What is presence, and where is it in this project?</h3><p>The feeling that the place is consistent. One café, instructions on paper, the gauge on the machine, sound coming from the object that makes it. No floating menu in a void. We did not measure presence. The simulator cannot. We designed for it (Slater and Wilbur’s coherence idea) and we should say we did not prove it.</p></div>
+  <div class="q"><h3>What is cybersickness, and what did you refuse to add?</h3><p>Discomfort from sensory conflict, often from vection. We refused smooth turn, artificial locomotion through the room, and flying. Snap turn and a slow slide are the only motion. We have not run a headset comfort study. Say that.</p></div>
+  <div class="q"><h3>What is vergence-accommodation conflict?</h3><p>In a headset the lenses fix the focus distance, but your eyes converge for the distance of the virtual object. Those two disagree, especially for small text up close. Our long reading boards are on the back wall, not 40 cm from the face. Tools are in arm’s reach, but they are not paragraphs.</p></div>
+  <div class="q"><h3>Walk the first shot. Why is it sour?</h3><p>Grind starts at 6.5. Coarser than the reference of 5, so time drops below 25 s. The dial says grind finer. Retry keeps the dial. That is dialling in.</p></div>
+  <div class="q"><h3>What if I tamp hard but tilted?</h3><p>Tilt over 5° multiplies time by 0.75 and pressure by 0.8, and the verdict is Channeled even if the shot would otherwise have been balanced. Water took the low side. The advice says keep the tamper level.</p></div>
+  <div class="q"><h3>What stops me brewing early?</h3><p><code>ShiftFlow</code> only accepts brew on the Brew step, and <code>ExtractionModel</code> also checks the lock and that the cup is under the group head. The ticket tells you why.</p></div>
+  <div class="q"><h3>How does the mouse grab without a headset?</h3><p><code>DesktopRigDriver</code> poses the right controller on a ray from the mouse, at a reach you change with the scroll wheel. It adds mouse click onto the same XRI Select action the headset grip uses. It does not run in the Editor if the Device Simulator is present.</p></div>
+  <div class="q"><h3>Why 90 Hz physics?</h3><p>The default fixed step is 50 Hz, so a 72–90 Hz headset moved the hand between physics ticks and the held object stuttered. <code>Time.fixedDeltaTime = 1/90</code> lines them up. More solver iterations make contacts less spongy.</p></div>
+  <div class="q"><h3>Show me a bug you understood, not one you pasted a fix for.</h3><p>Pick the depenetration one or the old exe one. Both have a cause you can draw: overlap separation speed, and “Play is memory, the build is the file on disk”.</p></div>
+  <div class="q"><h3>What is out of scope?</h3><p>Latte art, real fluid, multiplayer, customers, a measured comfort study, HRTF audio (we use Unity’s built-in 3D panning). Name them before he does.</p></div>
+</section>
+
+<section id="ai">
+  <h2>AI, in the words you should actually use</h2>
+  <div class="card warn">
+    <div class="label">Do not say “we wrote every line”</div>
+    <p>Cursor’s agent generated most of the C# , the scene builder and the first draft of the presentation notes, in this workspace, from the brief. That is high assistance. The group’s job, and the thing he is marking, is that you ran it, rejected parts, and can explain the remainder.</p>
+  </div>
+  <div class="say"><strong>A fair disclosure sentence</strong> We used Cursor’s coding agent to draft scripts and the scene builder from the brief. We then tested in Play mode, found collisions, text, layout and build problems, and changed the design: wall-mounted station controls, a flat welcome board, velocity tracking with a depenetration cap, and a tamper that stays upright. Each of us can open the file we own and explain the method that runs during the demo. We did not present generated text we cannot defend.</div>
+  <p>If a person cannot explain their row in the contribution table, do not give them that row. Split the work again before the day. Responsible use here means: you know the formula, you know what is faked (tamp spring, espresso fluid, milk), and you know what the simulator cannot prove.</p>
+  <h3>Things the agent got wrong that you should mention</h3>
+  <ul>
+    <li>A first grab setup felt physical and then flung tools. A second setup was stable and then ignored collisions. The current one is the compromise, and you should be able to say why both earlier ones failed.</li>
+    <li>Text outlines and a close welcome board looked worse in the headset view than in a code review. You fixed them by looking, not by trusting the first layout.</li>
+    <li>An early Windows build did not contain the scene you were playing. You learned that the build reads the saved scene, so the build menu now writes that scene first.</li>
+  </ul>
+</section>
+
+<section id="demo">
+  <h2>Demo, ten minutes, in this order</h2>
+  <ol class="flow">
+    <li>Start Play or the exe. Point at the seated view, the snap turn, and the station panel on the wall. Say you cannot fly.</li>
+    <li>START. Unlock, dose, show the grind number. Tamp once level. Mention you could tilt, and that tilt becomes Channeled.</li>
+    <li>Lock. Brew. Narrate the needle and the formula’s direction, not every constant.</li>
+    <li>Steam to the chime. Pour. Read the dial out loud. Pull another shot and show the grind did not reset.</li>
+    <li>Open credits from the station panel (or press K). Then, if you are in the Editor, stop and launch the exe for one mouse grab so he sees the build is the same café.</li>
+  </ol>
+  <div class="card">
+    <div class="label">If something misbehaves</div>
+    <p>Grind does nothing: the portafilter is not in the fork, or you are not on the Dose step. Brew does nothing: not locked, or the cup is not under the spouts. Tamp card stays on “press straight down”: the tamper is not centred on the basket. No sound: the Game view speaker icon mutes the Editor only. Old café in the exe: you built with File → Build Settings instead of Barista → Build Windows Player.</p>
+  </div>
+</section>
+
+<section id="limits">
+  <h2>Limitations to volunteer</h2>
+  <table>
+    <tr><th>Claim you must not make</th><th>What is true</th></tr>
+    <tr><td>“We proved it is comfortable.”</td><td>We followed seated, snap-turn guidance. We did not measure sickness.</td></tr>
+    <tr><td>“The tamp has real resistance.”</td><td>Visual compliance, a force number, and haptics on a controller. No rigidbody spring.</td></tr>
+    <tr><td>“The espresso is simulated.”</td><td>A deterministic teaching formula, then a stream mesh and a fill amount.</td></tr>
+    <tr><td>“Any headset works.”</td><td>OpenXR is set up. Only claim profiles you have worn.</td></tr>
+    <tr><td>“The slide notes match every switch.”</td><td>Early notes say there is no translation. The build has a short clamped slide. Explain the change.</td></tr>
+    <tr><td>“Physics feels like a real cup in the hand.”</td><td>Velocity tracking with caps is a compromise between collision and stability. Fast pushes still lag, and a held tool can be nudged by contacts.</td></tr>
+  </table>
+  <h3>References worth having on the last slide</h3>
+  <ul>
+    <li>Unity XR Interaction Toolkit 3 manual.</li>
+    <li>Meta, VR locomotion and comfort guidance.</li>
+    <li>LaViola, 2000, cybersickness.</li>
+    <li>Hoffman, Girshick, Akeley and Banks, 2008, vergence-accommodation conflict.</li>
+    <li>Slater and Wilbur, 1997, presence.</li>
+    <li>Specialty Coffee Association, espresso range: about 1:2 brew ratio, roughly 25–30 seconds. Our 18 g in, 36 g out, 25–30 s sits on that.</li>
+  </ul>
+</section>
+
+<footer>
+  <p>XR Continuum · INTE 42312 · generated as a viva companion for the Barista Calibration Trainer in this repository. Replace placeholders with your test numbers and names. If the build changes after this page, trust the script you can open, not this paragraph.</p>
+</footer>
+</main>
+</body>
+</html>
